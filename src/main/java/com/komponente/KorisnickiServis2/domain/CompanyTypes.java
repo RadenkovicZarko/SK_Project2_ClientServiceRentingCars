@@ -3,7 +3,7 @@ package com.komponente.KorisnickiServis2.domain;
 import javax.persistence.*;
 
 @Entity
-public class CompanyType {
+public class CompanyTypes {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
