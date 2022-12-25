@@ -1,18 +1,15 @@
 package com.komponente.KorisnickiServis2.dto;
 
-import javax.swing.*;
-
-public class CityDto {
-
-    private String city;
+public class CompanyDto {
+    private String companyName;
     private Boolean sort;
 
-    public String getCity() {
-        return city;
+    public String getCompanyName() {
+        return companyName;
     }
 
-    public void setCity(String city) {
-        this.city = city;
+    public void setCompanyName(String companyName) {
+        this.companyName = companyName;
     }
 
     public Boolean getSort() {

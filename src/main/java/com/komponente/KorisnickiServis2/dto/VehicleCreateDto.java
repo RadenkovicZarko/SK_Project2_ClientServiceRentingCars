@@ -7,20 +7,12 @@ import com.komponente.KorisnickiServis2.domain.Type;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToOne;
 
-public class VehicleDto {
-    private Long id;
+public class VehicleCreateDto {
+
     private int price;
     private Company company;
     private Model model;
     private Type type;
-
-    public Long getId() {
-        return id;
-    }
-
-    public void setId(Long id) {
-        this.id = id;
-    }
 
     public int getPrice() {
         return price;

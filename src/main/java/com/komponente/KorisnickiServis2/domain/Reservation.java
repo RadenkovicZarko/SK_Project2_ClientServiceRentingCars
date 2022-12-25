@@ -1,6 +1,7 @@
 package com.komponente.KorisnickiServis2.domain;
 
 import javax.persistence.*;
+import java.util.Date;
 
 @Entity
 public class Reservation {
@@ -10,16 +11,19 @@ public class Reservation {
     private Long id;
     @ManyToOne
     private Vehicle vehicle;
-    @ManyToOne
     private Long userId;
+    private Date date_from;
+    private Date date_to;
 
     public Reservation() {
     }
 
-    public Reservation(Long id, Vehicle vehicle, Long userId) {
+    public Reservation(Long id, Vehicle vehicle, Long userId, Date date_from, Date date_to) {
         this.id = id;
         this.vehicle = vehicle;
         this.userId = userId;
+        this.date_from = date_from;
+        this.date_to = date_to;
     }
 
     public Long getId() {
@@ -44,5 +48,21 @@ public class Reservation {
 
     public void setUserId(Long userId) {
         this.userId = userId;
+    }
+
+    public Date getDate_from() {
+        return date_from;
+    }
+
+    public void setDate_from(Date date_from) {
+        this.date_from = date_from;
+    }
+
+    public Date getDate_to() {
+        return date_to;
+    }
+
+    public void setDate_to(Date date_to) {
+        this.date_to = date_to;
     }
 }
