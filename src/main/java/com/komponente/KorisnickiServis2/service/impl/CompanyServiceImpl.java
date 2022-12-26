@@ -1,8 +1,10 @@
 package com.komponente.KorisnickiServis2.service.impl;
 
+import com.komponente.KorisnickiServis2.domain.Type;
 import com.komponente.KorisnickiServis2.domain.Vehicle;
 import com.komponente.KorisnickiServis2.dto.*;
 import com.komponente.KorisnickiServis2.exception.NotFoundException;
+import com.komponente.KorisnickiServis2.mapper.TypeMapper;
 import com.komponente.KorisnickiServis2.mapper.VehicleMapper;
 import com.komponente.KorisnickiServis2.repository.CompanyRepository;
 import com.komponente.KorisnickiServis2.repository.ReservationRepository;
@@ -11,10 +13,7 @@ import com.komponente.KorisnickiServis2.service.CompanyService;
 import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Service;
 
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.Comparator;
-import java.util.List;
+import java.util.*;
 
 @Service
 public class CompanyServiceImpl implements CompanyService {
@@ -23,12 +22,15 @@ public class CompanyServiceImpl implements CompanyService {
     private VehicleRepository vehicleRepository;
     private ReservationRepository reservationRepository;
     private VehicleMapper vehicleMapper;
+    private TypeMapper typeMapper;
 
-    public CompanyServiceImpl(CompanyRepository companyRepository, VehicleRepository vehicleRepository, ReservationRepository reservationRepository, VehicleMapper vehicleMapper) {
+
+    public CompanyServiceImpl(CompanyRepository companyRepository, VehicleRepository vehicleRepository, ReservationRepository reservationRepository, VehicleMapper vehicleMapper, TypeMapper typeMapper) {
         this.companyRepository = companyRepository;
         this.vehicleRepository = vehicleRepository;
         this.reservationRepository = reservationRepository;
         this.vehicleMapper = vehicleMapper;
+        this.typeMapper = typeMapper;
     }
 
     @Override
@@ -69,6 +71,19 @@ public class CompanyServiceImpl implements CompanyService {
         for(Vehicle v:vozilo)
             list.add(vehicleMapper.vehicleToVehicleDto(v));
         return list;
+    }
+
+    @Override
+    public List<TypeDto> findAllAvailbleTypeOfVehicleInDateInterval(DateDto dateDto) {
+        List<Vehicle> vozilo=vehicleRepository.findAllVehicleInDateInterval(dateDto.getFrom(),dateDto.getTo()).orElseThrow(() -> new NotFoundException(String
+                .format("There is no such types")));
+        Set<TypeDto> list=new HashSet<>();
+        for(Vehicle v:vozilo)
+        {
+            Type t=v.getType();
+            list.add(typeMapper.typeToTypeDto(t));
+        }
+        return list.stream().toList();
     }
 
     @Override

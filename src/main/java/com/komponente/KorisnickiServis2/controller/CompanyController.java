@@ -1,10 +1,7 @@
 package com.komponente.KorisnickiServis2.controller;
 
 
-import com.komponente.KorisnickiServis2.dto.CityDto;
-import com.komponente.KorisnickiServis2.dto.CompanyDto;
-import com.komponente.KorisnickiServis2.dto.DateDto;
-import com.komponente.KorisnickiServis2.dto.VehicleDto;
+import com.komponente.KorisnickiServis2.dto.*;
 import com.komponente.KorisnickiServis2.service.CompanyService;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.http.HttpStatus;
@@ -37,6 +34,11 @@ public class CompanyController {
     @PostMapping("/findByDateInterval")
     public ResponseEntity<List<VehicleDto>> findByDateInterval(@RequestBody() @Valid DateDto dateDto) {
         return new ResponseEntity<>(companyService.findAllVehicleInDateInterval(dateDto), HttpStatus.OK);
+    }
+
+    @PostMapping("/findTypes")
+    public ResponseEntity<List<TypeDto>> findAllAvailbleTypeOfVehicleInDateInterval(@RequestBody() @Valid DateDto dateDto) {
+        return new ResponseEntity<>(companyService.findAllAvailbleTypeOfVehicleInDateInterval(dateDto), HttpStatus.OK);
     }
 
 }

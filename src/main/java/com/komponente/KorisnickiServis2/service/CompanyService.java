@@ -13,6 +13,8 @@ public interface CompanyService {
 
     List<VehicleDto> findAllVehicleInDateInterval(DateDto dateDto);
 
+    List<TypeDto> findAllAvailbleTypeOfVehicleInDateInterval(DateDto dateDto);
+
     VehicleDto add(VehicleCreateDto vehicleCreateDto);
 
 }
