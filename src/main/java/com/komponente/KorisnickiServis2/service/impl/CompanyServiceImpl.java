@@ -18,78 +18,83 @@ import java.util.*;
 @Service
 public class CompanyServiceImpl implements CompanyService {
 
-    private CompanyRepository companyRepository;
-    private VehicleRepository vehicleRepository;
-    private ReservationRepository reservationRepository;
-    private VehicleMapper vehicleMapper;
-    private TypeMapper typeMapper;
+//    private CompanyRepository companyRepository;
+//    private VehicleRepository vehicleRepository;
+//    private ReservationRepository reservationRepository;
+//    private VehicleMapper vehicleMapper;
+//
+//
+//    public CompanyServiceImpl(CompanyRepository companyRepository, VehicleRepository vehicleRepository, ReservationRepository reservationRepository, VehicleMapper vehicleMapper) {
+//        this.companyRepository = companyRepository;
+//        this.vehicleRepository = vehicleRepository;
+//        this.reservationRepository = reservationRepository;
+//        this.vehicleMapper = vehicleMapper;
+//    }
 
 
-    public CompanyServiceImpl(CompanyRepository companyRepository, VehicleRepository vehicleRepository, ReservationRepository reservationRepository, VehicleMapper vehicleMapper, TypeMapper typeMapper) {
-        this.companyRepository = companyRepository;
-        this.vehicleRepository = vehicleRepository;
-        this.reservationRepository = reservationRepository;
-        this.vehicleMapper = vehicleMapper;
-        this.typeMapper = typeMapper;
-    }
-
-    @Override
-    public List<VehicleDto> findAllVehicleForCity(CityDto cityDto) {
-        List<Vehicle> vozilo=vehicleRepository.findAllVehicleForCity(cityDto.getCity()).orElseThrow(() -> new NotFoundException(String
-                .format("There is no such cars")));
-        List<VehicleDto> list=new ArrayList<>();
-        if(cityDto.getSort())
-        {
-            vozilo.sort(Comparator.comparingInt(Vehicle::getPrice));
-        }
-        for(Vehicle v:vozilo)
-            list.add(vehicleMapper.vehicleToVehicleDto(v));
-        return list;
-    }
-
-    @Override
-    public List<VehicleDto> findAllVehicleForCompany(CompanyDto companyDto) {
-        List<Vehicle> vozilo=vehicleRepository.findAllVehicleForCompany(companyDto.getCompanyName()).orElseThrow(() -> new NotFoundException(String
-                .format("There is no such cars")));
-        List<VehicleDto> list=new ArrayList<>();
-        if(companyDto.getSort())
-        {
-            vozilo.sort(Comparator.comparingInt(Vehicle::getPrice));
-        }
-        for(Vehicle v:vozilo)
-            list.add(vehicleMapper.vehicleToVehicleDto(v));
-        return list;
-    }
+//    @Override
+//    public VehicleDto add(VehicleCreateDto vehicleCreateDto) {
+//        return null;
+//    }
 
 
-    @Override
-    public List<VehicleDto> findAllVehicleInDateInterval(DateDto dateDto) {
-        System.out.println(dateDto.getTo()+ " "+dateDto.getFrom());
-        List<Vehicle> vozilo=vehicleRepository.findAllVehicleInDateInterval(dateDto.getFrom(),dateDto.getTo()).orElseThrow(() -> new NotFoundException(String
-                .format("There is no such cars")));
-        List<VehicleDto> list=new ArrayList<>();
-        for(Vehicle v:vozilo)
-            list.add(vehicleMapper.vehicleToVehicleDto(v));
-        return list;
-    }
 
-    @Override
-    public List<TypeDto> findAllAvailbleTypeOfVehicleInDateInterval(DateDto dateDto) {
-        List<Vehicle> vozilo=vehicleRepository.findAllVehicleInDateInterval(dateDto.getFrom(),dateDto.getTo()).orElseThrow(() -> new NotFoundException(String
-                .format("There is no such types")));
-        Set<TypeDto> list=new HashSet<>();
-        for(Vehicle v:vozilo)
-        {
-            Type t=v.getType();
-            list.add(typeMapper.typeToTypeDto(t));
-        }
-        return list.stream().toList();
-    }
 
-    @Override
-    public VehicleDto add(VehicleCreateDto vehicleCreateDto) {
-        return null;
-    }
 
+
+
+
+
+//    @Override
+//    public List<VehicleDto> findAllVehicleForCity(CityDto cityDto) {
+//        List<Vehicle> vozilo=vehicleRepository.findAllVehicleForCity(cityDto.getCity()).orElseThrow(() -> new NotFoundException(String
+//                .format("There is no such cars")));
+//        List<VehicleDto> list=new ArrayList<>();
+//        if(cityDto.getSort())
+//        {
+//            vozilo.sort(Comparator.comparingInt(Vehicle::getPrice));
+//        }
+//        for(Vehicle v:vozilo)
+//            list.add(vehicleMapper.vehicleToVehicleDto(v));
+//        return list;
+//    }
+//
+//    @Override
+//    public List<VehicleDto> findAllVehicleForCompany(CompanyDto companyDto) {
+//        List<Vehicle> vozilo=vehicleRepository.findAllVehicleForCompany(companyDto.getCompanyName()).orElseThrow(() -> new NotFoundException(String
+//                .format("There is no such cars")));
+//        List<VehicleDto> list=new ArrayList<>();
+//        if(companyDto.getSort())
+//        {
+//            vozilo.sort(Comparator.comparingInt(Vehicle::getPrice));
+//        }
+//        for(Vehicle v:vozilo)
+//            list.add(vehicleMapper.vehicleToVehicleDto(v));
+//        return list;
+//    }
+//
+//
+//    @Override
+//    public List<VehicleDto> findAllVehicleInDateInterval(DateDto dateDto) {
+//        List<Vehicle> vozilo=vehicleRepository.findAllVehicleInDateInterval(dateDto.getFrom(),dateDto.getTo()).orElseThrow(() -> new NotFoundException(String
+//                .format("There is no such cars")));
+//        List<VehicleDto> list=new ArrayList<>();
+//        for(Vehicle v:vozilo)
+//            list.add(vehicleMapper.vehicleToVehicleDto(v));
+//        return list;
+//    }
+//
+//    @Override
+//    public List<TypeDto> findAllAvailbleTypeOfVehicleInDateInterval(DateDto dateDto) {
+//        List<Vehicle> vozilo=vehicleRepository.findAllVehicleInDateInterval(dateDto.getFrom(),dateDto.getTo()).orElseThrow(() -> new NotFoundException(String
+//                .format("There is no such types")));
+//        Set<TypeDto> list=new HashSet<>();
+//        for(Vehicle v:vozilo)
+//        {
+//            Type t=v.getType();
+//            list.add(typeMapper.typeToTypeDto(t));
+//        }
+//        return list.stream().toList();
+//    }
 
 }

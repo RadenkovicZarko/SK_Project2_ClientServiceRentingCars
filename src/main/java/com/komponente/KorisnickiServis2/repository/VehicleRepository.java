@@ -18,4 +18,8 @@ public interface VehicleRepository extends JpaRepository<Vehicle,Long> {
     @Query(value = "select vehicle.* from vehicle where vehicle.id NOT IN(select vehicle.id from vehicle join reservation on(vehicle.id=reservation.vehicle_id) WHERE (?1>=reservation.date_from and ?2<=reservation.date_to) OR (?1>=reservation.date_from and ?1<=reservation.date_to) OR (?2>=reservation.date_from and ?2<=reservation.date_to))",nativeQuery = true)
     Optional<List<Vehicle>> findAllVehicleInDateInterval(Date d1, Date d2);
 
+
+
+
+
 }

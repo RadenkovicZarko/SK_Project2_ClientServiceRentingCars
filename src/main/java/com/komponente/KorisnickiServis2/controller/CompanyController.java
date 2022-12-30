@@ -21,24 +21,28 @@ public class CompanyController {
         this.companyService = companyService;
     }
 
-    @PostMapping("/findByCity")
-    public ResponseEntity<List<VehicleDto>> findByCity(@RequestBody() @Valid CityDto cityDto) {
-        return new ResponseEntity<>(companyService.findAllVehicleForCity(cityDto), HttpStatus.OK);
-    }
 
-    @PostMapping("/findByCompany")
-    public ResponseEntity<List<VehicleDto>> findByCompany(@RequestBody() @Valid CompanyDto companyDto) {
-        return new ResponseEntity<>(companyService.findAllVehicleForCompany(companyDto), HttpStatus.OK);
-    }
 
-    @PostMapping("/findByDateInterval")
-    public ResponseEntity<List<VehicleDto>> findByDateInterval(@RequestBody() @Valid DateDto dateDto) {
-        return new ResponseEntity<>(companyService.findAllVehicleInDateInterval(dateDto), HttpStatus.OK);
-    }
 
-    @PostMapping("/findTypes")
-    public ResponseEntity<List<TypeDto>> findAllAvailbleTypeOfVehicleInDateInterval(@RequestBody() @Valid DateDto dateDto) {
-        return new ResponseEntity<>(companyService.findAllAvailbleTypeOfVehicleInDateInterval(dateDto), HttpStatus.OK);
-    }
+
+//    @PostMapping("/findByCity")
+//    public ResponseEntity<List<VehicleDto>> findByCity(@RequestBody() @Valid CityDto cityDto) {
+//        return new ResponseEntity<>(companyService.findAllVehicleForCity(cityDto), HttpStatus.OK);
+//    }
+//
+//    @PostMapping("/findByCompany")
+//    public ResponseEntity<List<VehicleDto>> findByCompany(@RequestBody() @Valid CompanyDto companyDto) {
+//        return new ResponseEntity<>(companyService.findAllVehicleForCompany(companyDto), HttpStatus.OK);
+//    }
+//
+//    @PostMapping("/findByDateInterval")
+//    public ResponseEntity<List<VehicleDto>> findByDateInterval(@RequestBody() @Valid DateDto dateDto) {
+//        return new ResponseEntity<>(companyService.findAllVehicleInDateInterval(dateDto), HttpStatus.OK);
+//    }
+//
+//    @PostMapping("/findTypes")
+//    public ResponseEntity<List<TypeDto>> findAllAvailbleTypeOfVehicleInDateInterval(@RequestBody() @Valid DateDto dateDto) {
+//        return new ResponseEntity<>(companyService.findAllAvailbleTypeOfVehicleInDateInterval(dateDto), HttpStatus.OK);
+//    }
 
 }

@@ -7,14 +7,17 @@ import java.util.List;
 
 
 public interface CompanyService {
-    List<VehicleDto> findAllVehicleForCity(CityDto cityDto);
 
-    List<VehicleDto> findAllVehicleForCompany(CompanyDto companyDto);
+//    VehicleDto add(VehicleCreateDto vehicleCreateDto);
 
-    List<VehicleDto> findAllVehicleInDateInterval(DateDto dateDto);
 
-    List<TypeDto> findAllAvailbleTypeOfVehicleInDateInterval(DateDto dateDto);
 
-    VehicleDto add(VehicleCreateDto vehicleCreateDto);
 
+//        List<VehicleDto> findAllVehicleForCity(CityDto cityDto);
+//
+//    List<VehicleDto> findAllVehicleForCompany(CompanyDto companyDto);
+//
+//    List<VehicleDto> findAllVehicleInDateInterval(DateDto dateDto);
+//
+//    List<TypeDto> findAllAvailbleTypeOfVehicleInDateInterval(DateDto dateDto);
 }

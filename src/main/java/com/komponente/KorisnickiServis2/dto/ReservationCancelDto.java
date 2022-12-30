@@ -1,31 +1,16 @@
-package com.komponente.KorisnickiServis2.domain;
+package com.komponente.KorisnickiServis2.dto;
 
-import javax.persistence.*;
+import com.komponente.KorisnickiServis2.domain.Vehicle;
+
 import java.util.Date;
 
-@Entity
-public class Reservation {
-
-    @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
+public class ReservationCancelDto {
     private Long id;
-    @ManyToOne
     private Vehicle vehicle;
     private Long userId;
     private Date date_from;
     private Date date_to;
     private Long price;
-
-    public Reservation() {
-    }
-
-    public Reservation( Vehicle vehicle, Long userId, Date date_from, Date date_to, Long price) {
-        this.vehicle = vehicle;
-        this.userId = userId;
-        this.date_from = date_from;
-        this.date_to = date_to;
-        this.price = price;
-    }
 
     public Long getId() {
         return id;
