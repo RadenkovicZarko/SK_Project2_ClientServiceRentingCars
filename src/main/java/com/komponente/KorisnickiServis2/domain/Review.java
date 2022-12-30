@@ -16,6 +16,13 @@ public class Review {
     public Review() {
     }
 
+    public Review( Long userId, String description, Company id_company, Long rating) {
+        this.userId = userId;
+        this.description = description;
+        this.id_company = id_company;
+        this.rating = rating;
+    }
+
     public Review(Long id, Long userId, String description, Company id_company, Long rating) {
         this.id = id;
         this.userId = userId;
