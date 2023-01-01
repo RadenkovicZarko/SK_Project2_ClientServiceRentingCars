@@ -75,6 +75,8 @@ public class ReservationServiceImpl implements ReservationService {
 
 
 
+
+
         reservationRepository.save(reservation);
         UniversalEmailDto universalEmailDto=new UniversalEmailDto("Reservation",email,name,lastName,"",reservationCreateDto.getVehicleId(),String.valueOf(vehicle.getModel()),String.valueOf(vehicle.getType()),reservationCreateDto.getDate_from(),reservationCreateDto.getDate_to(),"","");
         jmsTemplate.convertAndSend(destination,messageHelper.createTextMessage(universalEmailDto));
