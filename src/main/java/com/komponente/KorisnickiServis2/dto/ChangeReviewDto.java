@@ -3,8 +3,17 @@ package com.komponente.KorisnickiServis2.dto;
 import com.komponente.KorisnickiServis2.domain.Company;
 
 public class ChangeReviewDto {
+    private Long id;
     private String description;
     private Long rating;
+
+    public Long getId() {
+        return id;
+    }
+
+    public void setId(Long id) {
+        this.id = id;
+    }
 
     public String getDescription() {
         return description;

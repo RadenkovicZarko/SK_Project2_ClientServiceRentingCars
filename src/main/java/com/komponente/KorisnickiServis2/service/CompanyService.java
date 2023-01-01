@@ -8,12 +8,13 @@ import java.util.List;
 
 public interface CompanyService {
 
+
+    List<CompanyDto> findAllCompaniesWithRating();
+
+
+
 //    VehicleDto add(VehicleCreateDto vehicleCreateDto);
-
-
-
-
-//        List<VehicleDto> findAllVehicleForCity(CityDto cityDto);
+//    List<VehicleDto> findAllVehicleForCity(CityDto cityDto);
 //
 //    List<VehicleDto> findAllVehicleForCompany(CompanyDto companyDto);
 //

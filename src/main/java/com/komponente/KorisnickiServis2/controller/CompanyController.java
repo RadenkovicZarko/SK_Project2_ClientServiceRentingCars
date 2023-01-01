@@ -21,6 +21,11 @@ public class CompanyController {
         this.companyService = companyService;
     }
 
+    @PostMapping("/averageRating")
+    public ResponseEntity<List<CompanyDto>> averageRating() {
+        return new ResponseEntity<>(companyService.findAllCompaniesWithRating(), HttpStatus.OK);
+    }
+
 
 
 

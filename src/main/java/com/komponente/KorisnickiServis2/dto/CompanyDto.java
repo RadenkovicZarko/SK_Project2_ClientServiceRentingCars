@@ -2,7 +2,15 @@ package com.komponente.KorisnickiServis2.dto;
 
 public class CompanyDto {
     private String companyName;
-    private Boolean sort;
+    private Long rating;
+
+    public CompanyDto() {
+    }
+
+    public CompanyDto(String companyName, Long rating) {
+        this.companyName = companyName;
+        this.rating = rating;
+    }
 
     public String getCompanyName() {
         return companyName;
@@ -12,11 +20,11 @@ public class CompanyDto {
         this.companyName = companyName;
     }
 
-    public Boolean getSort() {
-        return sort;
+    public Long getRating() {
+        return rating;
     }
 
-    public void setSort(Boolean sort) {
-        this.sort = sort;
+    public void setRating(Long rating) {
+        this.rating = rating;
     }
 }

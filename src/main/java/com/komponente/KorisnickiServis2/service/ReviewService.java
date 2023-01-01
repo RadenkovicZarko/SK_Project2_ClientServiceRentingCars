@@ -9,6 +9,6 @@ public interface ReviewService {
     List<ReviewDto> findAllReviewForSearchParameter(ReviewSearchDto reviewSearchDto);
     ReviewDto addReview(ReviewDto reviewDto);
     DeleteReviewDto deleteReview(DeleteReviewDto deletereviewDto);
-    ChangeReviewDto changeReview(ChangeReviewDto changeReviewDto);
+    ReviewDto changeReview(ChangeReviewDto changeReviewDto);
 
 }
