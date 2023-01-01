@@ -1,5 +1,6 @@
 package com.komponente.KorisnickiServis2.service.impl;
 
+import com.komponente.KorisnickiServis2.domain.Company;
 import com.komponente.KorisnickiServis2.domain.Type;
 import com.komponente.KorisnickiServis2.domain.Vehicle;
 import com.komponente.KorisnickiServis2.dto.*;
@@ -8,8 +9,10 @@ import com.komponente.KorisnickiServis2.mapper.TypeMapper;
 import com.komponente.KorisnickiServis2.mapper.VehicleMapper;
 import com.komponente.KorisnickiServis2.repository.CompanyRepository;
 import com.komponente.KorisnickiServis2.repository.ReservationRepository;
+import com.komponente.KorisnickiServis2.repository.ReviewRepository;
 import com.komponente.KorisnickiServis2.repository.VehicleRepository;
 import com.komponente.KorisnickiServis2.service.CompanyService;
+import com.komponente.KorisnickiServis2.service.ReviewService;
 import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Service;
 
@@ -17,6 +20,30 @@ import java.util.*;
 
 @Service
 public class CompanyServiceImpl implements CompanyService {
+
+    private CompanyRepository companyRepository;
+    private ReviewRepository reviewRepository;
+
+
+
+
+
+    @Override // Treba da se doda  sortiranje po averageRating-u
+    public List<CompanyDto> findAllCompaniesWithRating() {
+        List<Company> listaKompanija = companyRepository.findAll();
+
+
+        List<CompanyDto> companyDtos=new ArrayList<>();
+        for(Company c:listaKompanija)
+        {
+            Long avgRating=companyRepository.findAllReviewForCompany(c.getName()).orElseThrow(() -> new NotFoundException(String
+                    .format("Cant calculate average of rating")));
+            CompanyDto companyDto=new CompanyDto(c.getName(),avgRating);
+            companyDtos.add(companyDto);
+        }
+        companyDtos.sort(Comparator.comparingLong(CompanyDto::getRating));
+        return companyDtos;
+    }
 
 //    private CompanyRepository companyRepository;
 //    private VehicleRepository vehicleRepository;

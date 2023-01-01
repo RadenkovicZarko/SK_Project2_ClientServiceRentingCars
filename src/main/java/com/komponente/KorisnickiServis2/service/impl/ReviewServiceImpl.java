@@ -78,10 +78,13 @@ public class ReviewServiceImpl implements ReviewService {
         return deleteReviewDto;
     }
 
-    @Override
-    public ChangeReviewDto changeReview(ChangeReviewDto changeReviewDto) {
-        return null;
 
-        //TODO Update za rating i description
+    @Override
+    public ReviewDto changeReview(ChangeReviewDto changeReviewDto) {
+        Review review= reviewRepository.getOne(changeReviewDto.getId());
+        review.setDescription(changeReviewDto.getDescription());
+        review.setRating(changeReviewDto.getRating());
+        reviewRepository.save(review);
+        return reviewMapper.reviewToReviewDto(review);
     }
 }

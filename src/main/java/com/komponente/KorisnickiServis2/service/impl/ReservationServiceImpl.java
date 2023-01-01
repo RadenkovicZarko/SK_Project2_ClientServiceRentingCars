@@ -2,19 +2,24 @@ package com.komponente.KorisnickiServis2.service.impl;
 
 import com.komponente.KorisnickiServis2.client.userservice.dto.ClientRentingDaysDto;
 import com.komponente.KorisnickiServis2.client.userservice.dto.DiscountDto;
+import com.komponente.KorisnickiServis2.client.userservice.dto.UserReservationDto;
 import com.komponente.KorisnickiServis2.domain.Reservation;
 import com.komponente.KorisnickiServis2.domain.Vehicle;
 import com.komponente.KorisnickiServis2.dto.ReservationCancelDto;
 import com.komponente.KorisnickiServis2.dto.ReservationCreateDto;
 import com.komponente.KorisnickiServis2.dto.ReservationDto;
+import com.komponente.KorisnickiServis2.dto.UniversalEmailDto;
 import com.komponente.KorisnickiServis2.exception.NotFoundException;
+import com.komponente.KorisnickiServis2.helper.MessageHelper;
 import com.komponente.KorisnickiServis2.mapper.ReservationMapper;
 import com.komponente.KorisnickiServis2.repository.ReservationRepository;
 import com.komponente.KorisnickiServis2.repository.VehicleRepository;
 import com.komponente.KorisnickiServis2.service.ReservationService;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpMethod;
 import org.springframework.http.ResponseEntity;
+import org.springframework.jms.core.JmsTemplate;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
 
@@ -28,12 +33,20 @@ public class ReservationServiceImpl implements ReservationService {
     private ReservationMapper reservationMapper;
     private VehicleRepository vehicleRepository;
     private RestTemplate userServiceRestTemplate;
+    private JmsTemplate jmsTemplate;
+    private MessageHelper messageHelper;
+    private String destination;
 
-    public ReservationServiceImpl(ReservationRepository reservationRepository, ReservationMapper reservationMapper, VehicleRepository vehicleRepository, RestTemplate userServiceRestTemplate) {
+    public ReservationServiceImpl(ReservationRepository reservationRepository, ReservationMapper reservationMapper, VehicleRepository vehicleRepository,
+                                  RestTemplate userServiceRestTemplate, JmsTemplate jmsTemplate, MessageHelper messageHelper,
+                                  @Value("${destination.emailDestination}")String destination) {
         this.reservationRepository = reservationRepository;
         this.reservationMapper = reservationMapper;
         this.vehicleRepository = vehicleRepository;
         this.userServiceRestTemplate = userServiceRestTemplate;
+        this.jmsTemplate = jmsTemplate;
+        this.messageHelper = messageHelper;
+        this.destination = destination;
     }
 
     @Override
@@ -53,8 +66,18 @@ public class ReservationServiceImpl implements ReservationService {
         //
 
 
+        ResponseEntity<UserReservationDto> userReservationDtoResponseEntity = userServiceRestTemplate.exchange("/user/" +
+                reservationCreateDto.getUserId() + "/find", HttpMethod.GET, null, UserReservationDto.class);
+
+        String name=userReservationDtoResponseEntity.getBody().getFirstName();
+        String lastName=userReservationDtoResponseEntity.getBody().getLastName();
+        String email=userReservationDtoResponseEntity.getBody().getEmail();
+
+
 
         reservationRepository.save(reservation);
+        UniversalEmailDto universalEmailDto=new UniversalEmailDto("Reservation",email,name,lastName,"",reservationCreateDto.getVehicleId(),String.valueOf(vehicle.getModel()),String.valueOf(vehicle.getType()),reservationCreateDto.getDate_from(),reservationCreateDto.getDate_to(),"","");
+        jmsTemplate.convertAndSend(destination,messageHelper.createTextMessage(universalEmailDto));
 
 
         long diff=reservationCreateDto.getDate_to().getTime()- reservationCreateDto.getDate_from().getTime();
@@ -79,6 +102,16 @@ public class ReservationServiceImpl implements ReservationService {
                 "/updateRentingDays", HttpMethod.POST, request, ClientRentingDaysDto.class);
 
         reservationRepository.delete(reservationMapper.reservationCancelDtoToReservation(reservationCancelDto));
+        ResponseEntity<UserReservationDto> userReservationDtoResponseEntity = userServiceRestTemplate.exchange("/user/" +
+                reservationCancelDto.getUserId() + "/find", HttpMethod.GET, null, UserReservationDto.class);
+
+        String name=userReservationDtoResponseEntity.getBody().getFirstName();
+        String lastName=userReservationDtoResponseEntity.getBody().getLastName();
+        String email=userReservationDtoResponseEntity.getBody().getEmail();
+
+        UniversalEmailDto universalEmailDto=new UniversalEmailDto("CancelReservation",email,name,lastName,"",reservationCancelDto.getVehicle().getId(),"","",reservationCancelDto.getDate_from(),reservationCancelDto.getDate_to(),"","");
+        jmsTemplate.convertAndSend(destination,messageHelper.createTextMessage(universalEmailDto));
+
 
         return reservationMapper.reservationToReservationDto(reservationMapper.reservationCancelDtoToReservation(reservationCancelDto));
     }

@@ -1,5 +1,7 @@
 package com.komponente.KorisnickiServis2.dto;
 
+import com.komponente.KorisnickiServis2.domain.Model;
+import com.komponente.KorisnickiServis2.domain.Type;
 import com.komponente.KorisnickiServis2.domain.Vehicle;
 
 import java.util.Date;
@@ -43,4 +45,5 @@ public class ReservationCreateDto {
     public void setDate_to(Date date_to) {
         this.date_to = date_to;
     }
+
 }
