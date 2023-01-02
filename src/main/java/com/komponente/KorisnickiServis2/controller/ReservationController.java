@@ -1,5 +1,6 @@
 package com.komponente.KorisnickiServis2.controller;
 
+import com.komponente.KorisnickiServis2.domain.Reservation;
 import com.komponente.KorisnickiServis2.dto.*;
 import com.komponente.KorisnickiServis2.service.ReservationService;
 import org.springframework.http.HttpStatus;
@@ -23,6 +24,7 @@ public class ReservationController {
 
     @PostMapping("/makeReservation")
     public ResponseEntity<ReservationDto> findAllAvailableVehicle(@RequestBody()ReservationCreateDto reservationCreateDto) {
+        System.out.println(reservationCreateDto.getVehicleId());
         return new ResponseEntity<>(reservationService.createReservation(reservationCreateDto), HttpStatus.OK);
     }
 

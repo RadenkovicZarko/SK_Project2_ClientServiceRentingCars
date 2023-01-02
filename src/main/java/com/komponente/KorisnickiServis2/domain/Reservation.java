@@ -15,16 +15,26 @@ public class Reservation {
     private Date date_from;
     private Date date_to;
     private Long price;
+    private boolean resent;
 
     public Reservation() {
     }
 
-    public Reservation( Vehicle vehicle, Long userId, Date date_from, Date date_to, Long price) {
+    public Reservation( Vehicle vehicle, Long userId, Date date_from, Date date_to, Long price, boolean resent) {
         this.vehicle = vehicle;
         this.userId = userId;
         this.date_from = date_from;
         this.date_to = date_to;
         this.price = price;
+        this.resent = resent;
+    }
+
+    public boolean isResent() {
+        return resent;
+    }
+
+    public void setResent(boolean resent) {
+        this.resent = resent;
     }
 
     public Long getId() {
