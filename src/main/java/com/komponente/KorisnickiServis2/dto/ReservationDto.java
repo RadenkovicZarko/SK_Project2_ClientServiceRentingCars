@@ -5,18 +5,45 @@ import com.komponente.KorisnickiServis2.domain.Vehicle;
 import java.util.Date;
 
 public class ReservationDto {
-    private Vehicle vehicle;
+    private Long id;
+    private Long id_vehicle;
+    private String modelName;
+    private String typeName;
     private Long userId;
     private Date date_from;
     private Date date_to;
     private Long price;
 
-    public Vehicle getVehicle() {
-        return vehicle;
+    public Long getId() {
+        return id;
     }
 
-    public void setVehicle(Vehicle vehicle) {
-        this.vehicle = vehicle;
+    public void setId(Long id) {
+        this.id = id;
+    }
+
+    public String getModelName() {
+        return modelName;
+    }
+
+    public void setModelName(String modelName) {
+        this.modelName = modelName;
+    }
+
+    public String getTypeName() {
+        return typeName;
+    }
+
+    public void setTypeName(String typeName) {
+        this.typeName = typeName;
+    }
+
+    public Long getId_vehicle() {
+        return id_vehicle;
+    }
+
+    public void setId_vehicle(Long id_vehicle) {
+        this.id_vehicle = id_vehicle;
     }
 
     public Long getUserId() {

@@ -1,10 +1,12 @@
 package com.komponente.KorisnickiServis2.service.impl;
 
+import com.komponente.KorisnickiServis2.domain.Company;
 import com.komponente.KorisnickiServis2.domain.Review;
 import com.komponente.KorisnickiServis2.domain.Vehicle;
 import com.komponente.KorisnickiServis2.dto.*;
 import com.komponente.KorisnickiServis2.exception.NotFoundException;
 import com.komponente.KorisnickiServis2.mapper.ReviewMapper;
+import com.komponente.KorisnickiServis2.repository.CompanyRepository;
 import com.komponente.KorisnickiServis2.repository.ReviewRepository;
 import com.komponente.KorisnickiServis2.service.ReviewService;
 import org.springframework.stereotype.Service;
@@ -19,15 +21,17 @@ public class ReviewServiceImpl implements ReviewService {
 
     ReviewRepository reviewRepository;
     ReviewMapper reviewMapper;
+    CompanyRepository companyRepository;
 
 
-    public ReviewServiceImpl(ReviewRepository reviewRepository, ReviewMapper reviewMapper) {
+    public ReviewServiceImpl(ReviewRepository reviewRepository, ReviewMapper reviewMapper, CompanyRepository companyRepository) {
         this.reviewRepository = reviewRepository;
         this.reviewMapper = reviewMapper;
+        this.companyRepository = companyRepository;
     }
 
     @Override
-    public List<ReviewDto> findAllReviewForSearchParameter(ReviewSearchDto reviewSearchDto) {
+    public List<ReviewTableDto> findAllReviewForSearchParameter(ReviewSearchDto reviewSearchDto) {
         List<Review> recenzijeZaGrad=new ArrayList<>();
         if(!reviewSearchDto.getCity().isEmpty())
             recenzijeZaGrad=reviewRepository.findAllReviewForCity(reviewSearchDto.getCity()).orElseThrow(() -> new NotFoundException(String
@@ -57,24 +61,26 @@ public class ReviewServiceImpl implements ReviewService {
         if(reviewSearchDto.getCity().isEmpty() && reviewSearchDto.getCompanyName().isEmpty() )
             recenzije=reviewRepository.findAll();
 
-        List<ReviewDto> list=new ArrayList<>();
+        List<ReviewTableDto> list=new ArrayList<>();
 
         for(Review r:recenzije)
-            list.add(reviewMapper.reviewToReviewDto(r));
+            list.add(reviewMapper.reviewToReviewTableDto(r));
         return list;
     }
 
     @Override
-    public ReviewDto addReview(ReviewDto reviewDto) {
-        Review review=new Review(reviewDto.getUser_id(),reviewDto.getDescription(),reviewDto.getCompany(),reviewDto.getRating());
+    public ReviewDto addReview(ReviewCreateDto reviewCreateDto) {
+        System.out.println(reviewCreateDto.getId_company());
+        Company company=companyRepository.findById(reviewCreateDto.getId_company()).orElseThrow(() -> new NotFoundException(String
+                .format("There is no company with that id")));
+        Review review=new Review(reviewCreateDto.getUser_id(),reviewCreateDto.getDescription(),company,reviewCreateDto.getRating());
         reviewRepository.save(review);
-        return reviewDto;
+        return reviewMapper.reviewToReviewDto(review);
     }
 
     @Override
     public DeleteReviewDto deleteReview(DeleteReviewDto deleteReviewDto) {
-        Review review=new Review(deleteReviewDto.getId(),deleteReviewDto.getUser_id(),deleteReviewDto.getDescription(),deleteReviewDto.getCompany(),deleteReviewDto.getRating());
-        reviewRepository.delete(review);
+        reviewRepository.deleteById(deleteReviewDto.getId());
         return deleteReviewDto;
     }
 

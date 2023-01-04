@@ -1,12 +1,14 @@
 package com.komponente.KorisnickiServis2.client.userservice.dto;
 
+import java.util.Date;
+
 public class UserReservationDto {
     private String email;
     private String firstName;
     private String lastName;
     private String username;
     private String password;
-    private String dateOfBirth;
+    private Date dateOfBirth;
     private String contactNo;
 
 
@@ -50,11 +52,11 @@ public class UserReservationDto {
         this.password = password;
     }
 
-    public String getDateOfBirth() {
+    public Date getDateOfBirth() {
         return dateOfBirth;
     }
 
-    public void setDateOfBirth(String dateOfBirth) {
+    public void setDateOfBirth(Date dateOfBirth) {
         this.dateOfBirth = dateOfBirth;
     }
 

@@ -1,12 +1,10 @@
 package com.komponente.KorisnickiServis2.dto;
 
-import com.komponente.KorisnickiServis2.domain.Company;
-
-public class DeleteReviewDto {
+public class ReviewTableDto {
     private Long id;
     private String description;
     private Long user_id;
-    private Long id_company;
+    private String companyName;
     private Long rating;
 
     public Long getId() {
@@ -33,12 +31,12 @@ public class DeleteReviewDto {
         this.user_id = user_id;
     }
 
-    public Long getId_company() {
-        return id_company;
+    public String getCompanyName() {
+        return companyName;
     }
 
-    public void setId_company(Long id_company) {
-        this.id_company = id_company;
+    public void setCompanyName(String companyName) {
+        this.companyName = companyName;
     }
 
     public Long getRating() {

@@ -20,7 +20,7 @@ public class Reservation {
     public Reservation() {
     }
 
-    public Reservation( Vehicle vehicle, Long userId, Date date_from, Date date_to, Long price, boolean resent) {
+    public Reservation(Vehicle vehicle, Long userId, Date date_from, Date date_to, Long price, boolean resent) {
         this.vehicle = vehicle;
         this.userId = userId;
         this.date_from = date_from;

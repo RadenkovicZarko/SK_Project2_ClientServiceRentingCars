@@ -3,7 +3,6 @@ package com.komponente.KorisnickiServis2.controller;
 
 import com.komponente.KorisnickiServis2.dto.*;
 import com.komponente.KorisnickiServis2.service.CompanyService;
-import io.swagger.annotations.ApiOperation;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -21,13 +20,36 @@ public class CompanyController {
         this.companyService = companyService;
     }
 
-    @PostMapping("/averageRating")
+    @GetMapping("/averageRating")
     public ResponseEntity<List<CompanyDto>> averageRating() {
         return new ResponseEntity<>(companyService.findAllCompaniesWithRating(), HttpStatus.OK);
     }
 
+    @PostMapping("/setManager")
+    public ResponseEntity<CompanyInformationDto> setManager(@RequestBody SetManagerDto setManagerDto){
+        return new ResponseEntity<>(companyService.setManager(setManagerDto),HttpStatus.OK);
+    }
 
+    @GetMapping("/findAllAvailable")
+    public ResponseEntity<List<SearchCompanyDto>> findAllAvailable()
+    {
+        return new ResponseEntity<>(companyService.findAllAvailable(),HttpStatus.OK);
+    }
+    @GetMapping("/findAll")
+    public ResponseEntity<List<SearchCompanyDto>> findAll()
+    {
+        return new ResponseEntity<>(companyService.findAll(),HttpStatus.OK);
+    }
 
+    @PostMapping("/findByIdOfManager")
+    public ResponseEntity<CompanyInformationDto> findByIdOfManager(@RequestBody FindCompanyByManagerDto findCompanyByManagerDto){
+        return new ResponseEntity<>(companyService.findByIdOfManager(findCompanyByManagerDto),HttpStatus.OK);
+    }
+
+    @PostMapping("/updateCompanyDetails")
+    public ResponseEntity<CompanyInformationDto> updateCompanyDetails(@RequestBody CompanyInformationDto companyInformationDto){
+        return new ResponseEntity<>(companyService.updateCompany(companyInformationDto),HttpStatus.OK);
+    }
 
 
 //    @PostMapping("/findByCity")

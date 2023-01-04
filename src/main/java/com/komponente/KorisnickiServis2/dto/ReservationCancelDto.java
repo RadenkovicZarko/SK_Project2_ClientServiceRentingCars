@@ -6,7 +6,7 @@ import java.util.Date;
 
 public class ReservationCancelDto {
     private Long id;
-    private Vehicle vehicle;
+    private Long id_vehicle;
     private Long userId;
     private Date date_from;
     private Date date_to;
@@ -20,12 +20,12 @@ public class ReservationCancelDto {
         this.id = id;
     }
 
-    public Vehicle getVehicle() {
-        return vehicle;
+    public Long getId_vehicle() {
+        return id_vehicle;
     }
 
-    public void setVehicle(Vehicle vehicle) {
-        this.vehicle = vehicle;
+    public void setId_vehicle(Long id_vehicle) {
+        this.id_vehicle = id_vehicle;
     }
 
     public Long getUserId() {
@@ -58,5 +58,17 @@ public class ReservationCancelDto {
 
     public void setPrice(Long price) {
         this.price = price;
+    }
+
+    @Override
+    public String toString() {
+        return "ReservationCancelDto{" +
+                "id=" + id +
+                ", id_vehicle=" + id_vehicle +
+                ", userId=" + userId +
+                ", date_from=" + date_from +
+                ", date_to=" + date_to +
+                ", price=" + price +
+                '}';
     }
 }

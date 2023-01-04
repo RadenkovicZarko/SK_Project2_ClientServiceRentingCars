@@ -6,8 +6,8 @@ import java.util.List;
 
 public interface ReviewService {
 
-    List<ReviewDto> findAllReviewForSearchParameter(ReviewSearchDto reviewSearchDto);
-    ReviewDto addReview(ReviewDto reviewDto);
+    List<ReviewTableDto> findAllReviewForSearchParameter(ReviewSearchDto reviewSearchDto);
+    ReviewDto addReview(ReviewCreateDto reviewCreateDto);
     DeleteReviewDto deleteReview(DeleteReviewDto deletereviewDto);
     ReviewDto changeReview(ChangeReviewDto changeReviewDto);
 

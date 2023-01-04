@@ -10,24 +10,24 @@ public class Review {
     private Long userId;
     private String description;
     @ManyToOne
-    private Company id_company;
+    private Company company;
     private Long rating;
 
     public Review() {
     }
 
-    public Review( Long userId, String description, Company id_company, Long rating) {
+    public Review(Long userId, String description, Company company, Long rating) {
         this.userId = userId;
         this.description = description;
-        this.id_company = id_company;
+        this.company = company;
         this.rating = rating;
     }
 
-    public Review(Long id, Long userId, String description, Company id_company, Long rating) {
+    public Review(Long id, Long userId, String description, Company company, Long rating) {
         this.id = id;
         this.userId = userId;
         this.description = description;
-        this.id_company = id_company;
+        this.company = company;
         this.rating = rating;
     }
 
@@ -55,12 +55,12 @@ public class Review {
         this.description = description;
     }
 
-    public Company getId_company() {
-        return id_company;
+    public Company getCompany() {
+        return company;
     }
 
-    public void setId_company(Company id_company) {
-        this.id_company = id_company;
+    public void setCompany(Company company) {
+        this.company = company;
     }
 
     public Long getRating() {

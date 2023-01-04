@@ -1,28 +1,11 @@
-package com.komponente.KorisnickiServis2.domain;
+package com.komponente.KorisnickiServis2.dto;
 
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
-@Entity
-public class Company {
-    @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
+public class CompanyInformationDto {
     private Long id;
     private String name;
     private String description;
     private String city;
     private Long id_manager;
-
-    public Company() {
-    }
-
-    public Company(Long id, String name, String description, String city) {
-        this.id = id;
-        this.name = name;
-        this.description = description;
-        this.city = city;
-    }
 
     public Long getId() {
         return id;

@@ -1,19 +1,12 @@
 package com.komponente.KorisnickiServis2.service.impl;
 
 import com.komponente.KorisnickiServis2.domain.Company;
-import com.komponente.KorisnickiServis2.domain.Type;
-import com.komponente.KorisnickiServis2.domain.Vehicle;
 import com.komponente.KorisnickiServis2.dto.*;
 import com.komponente.KorisnickiServis2.exception.NotFoundException;
-import com.komponente.KorisnickiServis2.mapper.TypeMapper;
-import com.komponente.KorisnickiServis2.mapper.VehicleMapper;
+import com.komponente.KorisnickiServis2.mapper.CompanyMapper;
 import com.komponente.KorisnickiServis2.repository.CompanyRepository;
-import com.komponente.KorisnickiServis2.repository.ReservationRepository;
 import com.komponente.KorisnickiServis2.repository.ReviewRepository;
-import com.komponente.KorisnickiServis2.repository.VehicleRepository;
 import com.komponente.KorisnickiServis2.service.CompanyService;
-import com.komponente.KorisnickiServis2.service.ReviewService;
-import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Service;
 
 import java.util.*;
@@ -23,10 +16,13 @@ public class CompanyServiceImpl implements CompanyService {
 
     private CompanyRepository companyRepository;
     private ReviewRepository reviewRepository;
+    private CompanyMapper companyMapper;
 
-
-
-
+    public CompanyServiceImpl(CompanyRepository companyRepository, ReviewRepository reviewRepository, CompanyMapper companyMapper) {
+        this.companyRepository = companyRepository;
+        this.reviewRepository = reviewRepository;
+        this.companyMapper = companyMapper;
+    }
 
     @Override // Treba da se doda  sortiranje po averageRating-u
     public List<CompanyDto> findAllCompaniesWithRating() {
@@ -36,13 +32,65 @@ public class CompanyServiceImpl implements CompanyService {
         List<CompanyDto> companyDtos=new ArrayList<>();
         for(Company c:listaKompanija)
         {
-            Long avgRating=companyRepository.findAllReviewForCompany(c.getName()).orElseThrow(() -> new NotFoundException(String
-                    .format("Cant calculate average of rating")));
+            Long avgRating=companyRepository.findAllReviewForCompany(c.getName()).orElse(Long.valueOf(0));
             CompanyDto companyDto=new CompanyDto(c.getName(),avgRating);
+            System.out.println(companyDto.getRating());
             companyDtos.add(companyDto);
         }
         companyDtos.sort(Comparator.comparingLong(CompanyDto::getRating));
         return companyDtos;
+    }
+
+    @Override
+    public CompanyInformationDto setManager(SetManagerDto setManagerDto) {
+        System.out.println(setManagerDto.getNameOfcompany());
+        Company company=companyRepository.findByName(setManagerDto.getNameOfcompany()).orElseThrow(() -> new NotFoundException(String
+                .format("Cant find company")));
+        company.setId_manager(setManagerDto.getId_manager());
+        companyRepository.save(company);
+        return companyMapper.companyToCompanyInformationDto(company);
+    }
+
+    @Override
+    public List<SearchCompanyDto> findAllAvailable() {
+        List<Company> lista= companyRepository.findAllAvailable();
+
+        List<SearchCompanyDto> searchCompanyDtos=new ArrayList<>();
+        for(Company company:lista)
+        {
+            searchCompanyDtos.add(companyMapper.companyToSearchCompanyDto(company));
+        }
+
+        return searchCompanyDtos;
+    }
+
+    @Override
+    public List<SearchCompanyDto> findAll() {
+        List<Company> lista= companyRepository.findAll();
+
+        List<SearchCompanyDto> searchCompanyDtos=new ArrayList<>();
+        for(Company company:lista)
+        {
+            searchCompanyDtos.add(companyMapper.companyToSearchCompanyDto(company));
+        }
+
+        return searchCompanyDtos;
+    }
+
+    @Override
+    public CompanyInformationDto findByIdOfManager(FindCompanyByManagerDto findCompanyByManagerDto) {
+       return companyMapper.companyToCompanyInformationDto(companyRepository.findCompanyByManagerId(findCompanyByManagerDto.getManager_id()));
+
+    }
+
+    @Override
+    public CompanyInformationDto updateCompany(CompanyInformationDto companyInformationDto) {
+        Company company=companyRepository.findById(companyInformationDto.getId()).orElseThrow(() -> new NotFoundException(String
+                .format("Cant find company")));
+        company.setCity(companyInformationDto.getCity());
+        company.setDescription(companyInformationDto.getDescription());
+        companyRepository.save(company);
+        return companyMapper.companyToCompanyInformationDto(company);
     }
 
 //    private CompanyRepository companyRepository;

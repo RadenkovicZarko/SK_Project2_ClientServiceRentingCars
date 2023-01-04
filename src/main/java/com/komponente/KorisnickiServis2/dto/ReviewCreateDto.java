@@ -2,20 +2,11 @@ package com.komponente.KorisnickiServis2.dto;
 
 import com.komponente.KorisnickiServis2.domain.Company;
 
-public class DeleteReviewDto {
-    private Long id;
+public class ReviewCreateDto {
     private String description;
     private Long user_id;
     private Long id_company;
     private Long rating;
-
-    public Long getId() {
-        return id;
-    }
-
-    public void setId(Long id) {
-        this.id = id;
-    }
 
     public String getDescription() {
         return description;

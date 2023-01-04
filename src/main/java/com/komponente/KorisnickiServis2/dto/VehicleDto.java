@@ -10,9 +10,9 @@ import javax.persistence.OneToOne;
 public class VehicleDto {
     private Long id;
     private int price;
-    private Company company;
-    private Model model;
-    private Type type;
+    private String company;
+    private String model;
+    private String type;
 
     public Long getId() {
         return id;
@@ -30,27 +30,27 @@ public class VehicleDto {
         this.price = price;
     }
 
-    public Company getCompany() {
+    public String getCompany() {
         return company;
     }
 
-    public void setCompany(Company company) {
+    public void setCompany(String company) {
         this.company = company;
     }
 
-    public Model getModel() {
+    public String getModel() {
         return model;
     }
 
-    public void setModel(Model model) {
+    public void setModel(String model) {
         this.model = model;
     }
 
-    public Type getType() {
+    public String getType() {
         return type;
     }
 
-    public void setType(Type type) {
+    public void setType(String type) {
         this.type = type;
     }
 }

@@ -1,18 +1,11 @@
 package com.komponente.KorisnickiServis2.dto;
 
-import com.komponente.KorisnickiServis2.domain.Company;
-import com.komponente.KorisnickiServis2.domain.Model;
-import com.komponente.KorisnickiServis2.domain.Type;
-
-import javax.persistence.ManyToOne;
-import javax.persistence.OneToOne;
-
 public class VehicleCreateDto {
 
     private int price;
-    private Company company;
-    private Model model;
-    private Type type;
+    private Long company;
+    private Long model;
+    private Long type;
 
     public int getPrice() {
         return price;
@@ -22,27 +15,27 @@ public class VehicleCreateDto {
         this.price = price;
     }
 
-    public Company getCompany() {
+    public Long getCompany() {
         return company;
     }
 
-    public void setCompany(Company company) {
+    public void setCompany(Long company) {
         this.company = company;
     }
 
-    public Model getModel() {
+    public Long getModel() {
         return model;
     }
 
-    public void setModel(Model model) {
+    public void setModel(Long model) {
         this.model = model;
     }
 
-    public Type getType() {
+    public Long getType() {
         return type;
     }
 
-    public void setType(Type type) {
+    public void setType(Long type) {
         this.type = type;
     }
 }

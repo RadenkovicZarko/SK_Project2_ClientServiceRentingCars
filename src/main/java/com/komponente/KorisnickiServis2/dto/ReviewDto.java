@@ -5,10 +5,19 @@ import com.komponente.KorisnickiServis2.domain.Company;
 import javax.persistence.ManyToOne;
 
 public class ReviewDto {
+    private Long id;
     private String description;
     private Long user_id;
-    private Company company;
+    private Long id_company;
     private Long rating;
+
+    public Long getId() {
+        return id;
+    }
+
+    public void setId(Long id) {
+        this.id = id;
+    }
 
     public String getDescription() {
         return description;
@@ -26,12 +35,12 @@ public class ReviewDto {
         this.user_id = user_id;
     }
 
-    public Company getCompany() {
-        return company;
+    public Long getId_company() {
+        return id_company;
     }
 
-    public void setCompany(Company company) {
-        this.company = company;
+    public void setId_company(Long id_company) {
+        this.id_company = id_company;
     }
 
     public Long getRating() {

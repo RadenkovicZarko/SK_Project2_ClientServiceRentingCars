@@ -23,7 +23,7 @@ public class ReservationController {
 
 
     @PostMapping("/makeReservation")
-    public ResponseEntity<ReservationDto> findAllAvailableVehicle(@RequestBody()ReservationCreateDto reservationCreateDto) {
+    public ResponseEntity<ReservationDto> makeReservation(@RequestBody()ReservationCreateDto reservationCreateDto) {
         System.out.println(reservationCreateDto.getVehicleId());
         return new ResponseEntity<>(reservationService.createReservation(reservationCreateDto), HttpStatus.OK);
     }
@@ -32,5 +32,10 @@ public class ReservationController {
     @PostMapping("/cancelReservation")
     public ResponseEntity<ReservationDto> cancelReservation(@RequestBody() ReservationCancelDto reservationCancelDto) {
         return new ResponseEntity<>(reservationService.cancelReservation(reservationCancelDto), HttpStatus.OK);
+    }
+
+    @PostMapping("/getReservation")
+    public ResponseEntity<List<ReservationDto>> getReservation(@RequestBody() FindReservationsDto findReservationsDto) {
+        return new ResponseEntity<>(reservationService.findAllForUser(findReservationsDto), HttpStatus.OK);
     }
 }

@@ -5,10 +5,7 @@ import com.komponente.KorisnickiServis2.client.userservice.dto.DiscountDto;
 import com.komponente.KorisnickiServis2.client.userservice.dto.UserReservationDto;
 import com.komponente.KorisnickiServis2.domain.Reservation;
 import com.komponente.KorisnickiServis2.domain.Vehicle;
-import com.komponente.KorisnickiServis2.dto.ReservationCancelDto;
-import com.komponente.KorisnickiServis2.dto.ReservationCreateDto;
-import com.komponente.KorisnickiServis2.dto.ReservationDto;
-import com.komponente.KorisnickiServis2.dto.UniversalEmailDto;
+import com.komponente.KorisnickiServis2.dto.*;
 import com.komponente.KorisnickiServis2.exception.NotFoundException;
 import com.komponente.KorisnickiServis2.helper.MessageHelper;
 import com.komponente.KorisnickiServis2.mapper.ReservationMapper;
@@ -23,7 +20,7 @@ import org.springframework.jms.core.JmsTemplate;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
 
-import java.time.Duration;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.TimeUnit;
 
@@ -58,27 +55,29 @@ public class ReservationServiceImpl implements ReservationService {
 
 
         //Kada reservationCreateDto bude imao ceo Vehicle a za sada radimo kao da ima samo ID od Vehicle, kada se to popravi, treba da se sredi VehicleMapper
-        //Long price = (long) reservationCreateDto.getVehicle().getPrice() / 100L * Long.valueOf(discountDtoResponseEntity.getBody().getDiscount());
-        //Reservation reservation=new Reservation(reservationCreateDto.getVehicle(), reservationCreateDto.getUserId(), reservationCreateDto.getDate_from(), reservationCreateDto.getDate_to(),price);
+        //Long price = (long) reservationCreateDto.getId_vehicle().getPrice() / 100L * Long.valueOf(discountDtoResponseEntity.getBody().getDiscount());
+        //Reservation reservation=new Reservation(reservationCreateDto.getId_vehicle(), reservationCreateDto.getUserId(), reservationCreateDto.getDate_from(), reservationCreateDto.getDate_to(),price);
         Vehicle vehicle=vehicleRepository.findById(reservationCreateDto.getVehicleId()).orElseThrow(() -> new NotFoundException("There is no such cars"));
         Long price = (long)vehicle.getPrice()-(long) vehicle.getPrice() / 100L * Long.valueOf(discountDtoResponseEntity.getBody().getDiscount());
         Reservation reservation=new Reservation(vehicle, reservationCreateDto.getUserId(), reservationCreateDto.getDate_from(), reservationCreateDto.getDate_to(),price,false);
         //
 
-
         ResponseEntity<UserReservationDto> userReservationDtoResponseEntity = userServiceRestTemplate.exchange("/user/" +
                 reservationCreateDto.getUserId() + "/find", HttpMethod.GET, null, UserReservationDto.class);
 
+        ResponseEntity<UserReservationDto> managerReservationDtoResponseEntity = userServiceRestTemplate.exchange("/user/" +
+                vehicle.getCompany().getId_manager() + "/find", HttpMethod.GET, null, UserReservationDto.class);
         String name=userReservationDtoResponseEntity.getBody().getFirstName();
         String lastName=userReservationDtoResponseEntity.getBody().getLastName();
         String email=userReservationDtoResponseEntity.getBody().getEmail();
 
+        String managerEmail=managerReservationDtoResponseEntity.getBody().getEmail();
 
 
 
 
         reservationRepository.save(reservation);
-        UniversalEmailDto universalEmailDto=new UniversalEmailDto("Reservation",email,name,lastName,"",reservationCreateDto.getVehicleId(),String.valueOf(vehicle.getModel().getName()),String.valueOf(vehicle.getType().getName()),reservationCreateDto.getDate_from(),reservationCreateDto.getDate_to(),"","");
+        UniversalEmailDto universalEmailDto=new UniversalEmailDto("Reservation",email,name,lastName,"",reservationCreateDto.getVehicleId(),String.valueOf(vehicle.getModel().getName()),String.valueOf(vehicle.getType().getName()),reservationCreateDto.getDate_from(),reservationCreateDto.getDate_to(),managerEmail,"");
         jmsTemplate.convertAndSend(destination,messageHelper.createTextMessage(universalEmailDto));
 
 
@@ -108,21 +107,28 @@ public class ReservationServiceImpl implements ReservationService {
         ResponseEntity<UserReservationDto> userReservationDtoResponseEntity = userServiceRestTemplate.exchange("/user/" +
                 reservationCancelDto.getUserId() + "/find", HttpMethod.GET, null, UserReservationDto.class);
 
+        Vehicle vehicle=vehicleRepository.findById(reservationCancelDto.getId_vehicle()).orElseThrow(() -> new NotFoundException("There is no such cars"));
+        ResponseEntity<UserReservationDto> managerReservationDtoResponseEntity = userServiceRestTemplate.exchange("/user/" +
+                vehicle.getCompany().getId_manager() + "/find", HttpMethod.GET, null, UserReservationDto.class);
+
         String name=userReservationDtoResponseEntity.getBody().getFirstName();
         String lastName=userReservationDtoResponseEntity.getBody().getLastName();
         String email=userReservationDtoResponseEntity.getBody().getEmail();
+        String managerEmail=managerReservationDtoResponseEntity.getBody().getEmail();
 
-        UniversalEmailDto universalEmailDto=new UniversalEmailDto("CancelReservation",email,name,lastName,"",reservationCancelDto.getVehicle().getId(),"","",reservationCancelDto.getDate_from(),reservationCancelDto.getDate_to(),"","");
+        UniversalEmailDto universalEmailDto=new UniversalEmailDto("CancelReservation",email,name,lastName,"",reservationCancelDto.getId(),"","",reservationCancelDto.getDate_from(),reservationCancelDto.getDate_to(),managerEmail,"");
         jmsTemplate.convertAndSend(destination,messageHelper.createTextMessage(universalEmailDto));
 
 
-        return reservationMapper.reservationToReservationDto(reservationMapper.reservationCancelDtoToReservation(reservationCancelDto));
+        return reservationMapper.reservationCancelDtoToReservationDto(reservationCancelDto);
     }
 
     @Override
     public List<Reservation> findAll() {
         return reservationRepository.findAll();
     }
+
+
 
     @Override
     public void sendScheduledNotification(Reservation reservation) {
@@ -135,5 +141,29 @@ public class ReservationServiceImpl implements ReservationService {
         reservationRepository.save(reservation);
         UniversalEmailDto universalEmailDto=new UniversalEmailDto("Reservation",email,name,lastName,"",reservation.getVehicle().getId(),String.valueOf(reservation.getVehicle().getModel().getName()),String.valueOf(reservation.getVehicle().getType().getName()),reservation.getDate_from(),reservation.getDate_to(),"","");
         jmsTemplate.convertAndSend(destination,messageHelper.createTextMessage(universalEmailDto));
+    }
+
+    @Override
+    public List<ReservationDto> findAllForUser(FindReservationsDto findReservationsDto) {
+        List<ReservationDto> list = new ArrayList<>();
+        if (findReservationsDto.getRole().equalsIgnoreCase("ROLE_CLIENT"))
+        {
+            List<Reservation> reservations=reservationRepository.findAllReservationsForUser(findReservationsDto.getId()).orElse(new ArrayList<>());
+            for(Reservation r:reservations)
+            {
+                list.add(reservationMapper.reservationToReservationDto(r));
+            }
+
+        }
+        else
+        {
+            List<Reservation> reservations=reservationRepository.findAll();
+            for(Reservation r:reservations)
+            {
+                if(r.getVehicle().getCompany().getId_manager().equals(findReservationsDto.getId()))
+                    list.add(reservationMapper.reservationToReservationDto(r));
+            }
+        }
+        return list;
     }
 }
